@@ -1,198 +1,59 @@
-## Git-Flows version control
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-Gitflow is an alternative Git branching model that involves the use of feature branches and multiple primary branches.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-```sh
-sudo apt-get install git-flow
-```
+## About Laravel
 
-Setup Git Flow
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-```sh
-git flow init [-d]
-```
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-[Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-[Merging vs. rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
+## Learning Laravel
 
-[Git stash](https://www.atlassian.com/git/tutorials/saving-changes/git-stash)
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-### Branching Strategies
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-Branching strategies in Git help teams manage parallel development efforts. Understanding different models, such as GitFlow, is crucial for maintaining a clean and manageable codebase.
+## Laravel Sponsors
 
-#### Main Branches:
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-- **master**: Stores production-ready code.
-- **develop**: Integrates features before release.
+### Premium Partners
 
-#### Supporting Branches:
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
-- **feature/***: Used for developing new features.
-- **release/***: Prepares code for production.
-- **hotfix/***: Quick fixes to production code. 
+## Contributing
 
-#### Usage:
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-GitFlow is ideal for projects with scheduled releases and multiple developers.
+## Code of Conduct
 
-- **Feature Branch Workflow**:
-Developers create branches for each new feature or bug fix.
-Merges occur back into main or develop after code review.
-- **Forking Workflow**:
-Developers work in personal forks and submit pull requests to the main repository.
-Common in open-source projects where contributors don’t have direct push access.
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-### Feature branches 
+## Security Vulnerabilities
 
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## License
 
-Note that feature branches combined with the develop branch is, for all intents and purposes, the Feature Branch Workflow. But, the Gitflow workflow doesn’t stop there.
-
-Feature branches are generally created off to the latest develop branch.
-
-![future branch](images/Feature%20branches.png)
-
-#### Creating a feature branch 
-
-Without the git-flow extensions:
-
-```sh
-git checkout develop
-git checkout -b feature_branch
-```
-
-When using the git-flow extension:
-
-```sh
-git flow feature start feature_branch
-```
-
-Continue your work and use Git like you normally would.
-
-#### Finishing a feature branch
-
-When you’re done with the development work on the feature, the next step is to merge the feature_branch into develop.
-
-Without the git-flow extensions:
-
-```sh
-git checkout develop
-git merge feature_branch
-```
-
-Using the git-flow extensions:
-
-```sh
-git flow feature finish feature_branch
-```
-
-### Release branches
-
-Once develop has acquired enough features for a release (or a predetermined release date is approaching), you fork a release branch off of develop. Creating this branch starts the next release cycle, so no new features can be added after this point—only bug fixes, documentation generation, and other release-oriented tasks should go in this branch. Once it's ready to ship, the release branch gets merged into main and tagged with a version number. In addition, it should be merged back into develop, which may have progressed since the release was initiated.
-
-![release branch](images/Release%20branches.png)
-
-#### Creating a Release branches
-
-Without the git-flow extensions:
-
-```sh
-git checkout develop
-git checkout -b release/0.1.0
-```
-
-When using the git-flow extensions:
-
-```sh
-$ git flow release start 0.1.0
-Switched to a new branch 'release/0.1.0'
-```
-
-#### Finishing a feature branch
-
-Once the release is ready to ship, it will get merged it into main and develop, then the release branch will be deleted. It’s important to merge back into develop because critical updates may have been added to the release branch and they need to be accessible to new features. If your organization stresses code review, this would be an ideal place for a pull request.
-
-Without the git-flow extensions:
-
-```sh
-git checkout main
-git merge release/0.1.0
-```
-
-Or with the git-flow extension:
-
-```sh
-git flow release finish '0.1.0'
-```
-
-
-### Hotfix branches 
-
-Maintenance or “hotfix” branches are used to quickly patch production releases. Hotfix branches are a lot like release branches and feature branches except they're based on main instead of develop. This is the only branch that should fork directly off of main. As soon as the fix is complete, it should be merged into both main and develop (or the current release branch), and main should be tagged with an updated version number.
-
-Having a dedicated line of development for bug fixes lets your team address issues without interrupting the rest of the workflow or waiting for the next release cycle. You can think of maintenance branches as ad hoc release branches that work directly with main.
-
-![Hotfix branches](images/Hotfix%20branches.png)
-
-#### Creating a Hotfix branches
-
-Without the git-flow extensions:
-
-```sh
-git checkout main
-git checkout -b hotfix_branch
-```
-
-When using the git-flow extensions:
-
-```sh
-git flow hotfix start hotfix_branch
-```
-
-#### Finishing a Hotfix branches
-
-Without the git-flow extensions:
-
-```sh
-git checkout main
-git merge hotfix_branch
-git checkout develop
-git merge hotfix_branch
-git branch -D hotfix_branch
-```
-
-When using the git-flow extensions:
-
-```sh
-git flow hotfix finish hotfix_branch
-```
-
-
-### Summary 
-
-
-
-Here we discussed the Gitflow Workflow. Gitflow is one of many styles of Git workflows you and your team can utilize.
-
-Some key takeaways to know about Gitflow are:
-
-    The workflow is great for a release-based software workflow.
-    Gitflow offers a dedicated channel for hotfixes to production.
-
-The overall flow of Gitflow is:
-
-1. A develop branch is created from main
-
-2. A release branch is created from develop
-
-3. Feature branches are created from develop
-
-4. When a feature is complete it is merged into the develop branch
-
-5. When the release branch is done it is merged into develop and main
-
-6. If an issue in main is detected a hotfix branch is created from main
-
-7. Once the hotfix is complete it is merged to both develop and main
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
