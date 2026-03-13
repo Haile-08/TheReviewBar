@@ -5,16 +5,26 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint:vue": "eslint \"resources/js/**/*.vue\" --fix",
+    "lint:php": "./vendor/bin/pint",
+    "lint": "pnpm run lint:vue && pnpm run lint:php",
+    "format": "prettier --write \"resources/js/**/*.vue\""
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.4",
     "@commitlint/config-conventional": "^20.4.4",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.0.0",
     "axios": "^1.11.0",
     "concurrently": "^9.0.1",
+    "eslint": "^10.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.8.0",
+    "globals": "^17.4.0",
     "husky": "^9.1.7",
     "laravel-vite-plugin": "^2.0.0",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4.0.0",
     "vite": "^7.0.7"
   },
