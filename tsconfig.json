@@ -4,6 +4,9 @@
         "module": "esnext",
         "moduleResolution": "node",
         "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/js/*"]
+        },
         "strict": true,
         "skipLibCheck": true,
         "noImplicitAny": false,
