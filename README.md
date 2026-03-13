@@ -52,7 +52,7 @@ Note that feature branches combined with the develop branch is, for all intents 
 
 Feature branches are generally created off to the latest develop branch.
 
-![future branch](Feature%20branches.png)
+![future branch](images/Feature%20branches.png)
 
 #### Creating a feature branch 
 
@@ -92,7 +92,7 @@ git flow feature finish feature_branch
 
 Once develop has acquired enough features for a release (or a predetermined release date is approaching), you fork a release branch off of develop. Creating this branch starts the next release cycle, so no new features can be added after this point—only bug fixes, documentation generation, and other release-oriented tasks should go in this branch. Once it's ready to ship, the release branch gets merged into main and tagged with a version number. In addition, it should be merged back into develop, which may have progressed since the release was initiated.
 
-![release branch](Release%20branches.png)
+![release branch](images/Release%20branches.png)
 
 #### Creating a Release branches
 
@@ -134,7 +134,7 @@ Maintenance or “hotfix” branches are used to quickly patch production releas
 
 Having a dedicated line of development for bug fixes lets your team address issues without interrupting the rest of the workflow or waiting for the next release cycle. You can think of maintenance branches as ad hoc release branches that work directly with main.
 
-![Hotfix branches](Hotfix%20branches.png)
+![Hotfix branches](images/Hotfix%20branches.png)
 
 #### Creating a Hotfix branches
 
