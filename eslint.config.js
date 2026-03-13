@@ -1,18 +1,17 @@
 import js from '@eslint/js';
 import pluginVue from 'eslint-plugin-vue';
+import vueTsEslintConfig from '@vue/eslint-config-typescript';
 import skipPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 
 export default [
   {
-    // Global ignores
     ignores: ['public/**', 'vendor/**', 'node_modules/**', 'resources/js/bootstrap.js'],
   },
-  // 1. Base JS rules
   js.configs.recommended,
 
-  // 2. Vue-specific configuration
   ...pluginVue.configs['flat/recommended'],
+  ...vueTsEslintConfig(),
 
   {
     files: ['**/*.vue'],
@@ -26,9 +25,9 @@ export default [
     rules: {
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'error',
+      'vue/block-lang': 'off',
     },
   },
-
-  // 3. Prettier override (Keep this last!)
+  
   skipPrettier,
 ];
