@@ -16,10 +16,18 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('profile_picture')){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+            'confirm_password' => 'required|same:password',
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('profile_picture')) {
             Storage::disk('private')->put('profile_picture', $request->profile_picture);
         }
 
-        dd('ok');
+        
     }
 }
