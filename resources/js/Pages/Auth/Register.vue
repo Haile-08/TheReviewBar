@@ -28,7 +28,7 @@ const formSchema = toTypedSchema(
                 .string()
                 .min(8, "Password too short at least 2 characters."),
             confirm_password: z.string(),
-            profile_picture: z
+            profile: z
                 .any()
                 .refine(
                     (file) => file instanceof File,
@@ -66,16 +66,14 @@ watch(
             setErrors(newErrors);
         }
     },
-    { immediate: true }
+    { immediate: true },
 );
 
 const change = (e: Event) => {
     const target = e.target as HTMLInputElement;
     const file = target.files?.[0];
-    setFieldValue("profile_picture", file);
+    setFieldValue("profile", file);
 };
-
-
 
 const submit = handleSubmit((values) => {
     console.log(values);
@@ -87,7 +85,7 @@ const submit = handleSubmit((values) => {
     <div class="p-10 w-dvw h-full flex justify-between items-center">
         <div class="w-[40%] h-full flex justify-center items-center">
             <form class="w-2/3 space-y-6" @submit="submit">
-                <FormField name="profile_picture">
+                <FormField name="profile">
                     <FormItem>
                         <FormLabel>Profile Picture</FormLabel>
                         <FormControl>
