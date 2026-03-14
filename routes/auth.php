@@ -14,9 +14,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [RegisterController::class, 'store']);
 
+    // google auth
     Route::get('/auth/redirect', function () {
         return Socialite::driver('google')->redirect();
     })->name('google');
-
     Route::get('/auth/callback', [AuthController::class, 'google']);
 });

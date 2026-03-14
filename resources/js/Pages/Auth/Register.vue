@@ -86,6 +86,7 @@ const submit = handleSubmit((values) => {
 </script>
 
 <template>
+    <Head title="Register" />
     <div class="p-10 w-dvw h-full flex justify-between items-center">
         <div class="w-[40%] h-full flex justify-center items-center">
             <div
