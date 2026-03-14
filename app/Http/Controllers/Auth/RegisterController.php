@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Request;
-use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -25,7 +25,7 @@ class RegisterController extends Controller
         ]);
 
         if ($request->hasFile('profile')) {
-            $values['profile'] = Storage::disk('private')->put('profile', $request->profile);
+            $values['profile'] = Storage::disk('public')->put('profile', $request->profile);
         }
 
         User::create($values);
