@@ -96,6 +96,9 @@ const submit = handleSubmit((values) => {
                         </div>
                     </FormItem>
                 </FormField>
+                <a :href="route('google')">
+                    <Button type="button">Google</Button>
+                </a>
                 <Button type="submit">Register</Button>
             </form>
         </div>

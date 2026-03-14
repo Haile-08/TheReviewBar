@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::middleware('guest')->group(function () {
     // register
@@ -12,4 +13,10 @@ Route::middleware('guest')->group(function () {
     // login
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [RegisterController::class, 'store']);
+
+    Route::get('/auth/redirect', function () {
+        return Socialite::driver('google')->redirect();
+    })->name('google');
+
+    Route::get('/auth/callback', [AuthController::class, 'google']);
 });
