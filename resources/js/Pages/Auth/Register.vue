@@ -15,6 +15,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
 
 const SIZE = 5000000;
 const TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -59,8 +61,10 @@ const { handleSubmit, setFieldValue, setErrors } = useForm({
     },
 });
 
+const page = usePage();
+
 watch(
-    () => usePage().props.errors,
+    () => page.props.errors,
     (newErrors) => {
         if (newErrors && Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -84,6 +88,28 @@ const submit = handleSubmit((values) => {
 <template>
     <div class="p-10 w-dvw h-full flex justify-between items-center">
         <div class="w-[40%] h-full flex justify-center items-center">
+            <div
+                v-if="
+                    page.props.errors &&
+                    Object.keys(page.props.errors).length > 0
+                "
+                class="mb-6"
+            >
+                <Alert variant="destructive">
+                    <AlertCircleIcon class="h-4 w-4" />
+                    <AlertTitle>Login Failed</AlertTitle>
+                    <AlertDescription>
+                        <ul class="list-disc list-inside">
+                            <li
+                                v-for="(error, key) in page.props.errors"
+                                :key="key"
+                            >
+                                {{ error }}
+                            </li>
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            </div>
             <form class="w-2/3 space-y-6" @submit="submit">
                 <FormField name="profile">
                     <FormItem>
