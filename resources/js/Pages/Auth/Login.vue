@@ -3,6 +3,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
 import { watch } from "vue";
+import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,7 @@ watch(
 
 const submit = handleSubmit((values) => {
     console.log(values);
+    router.post("/login", values);
 });
 </script>
 
@@ -126,7 +128,7 @@ const submit = handleSubmit((values) => {
                 <a :href="route('google')">
                     <Button type="button">Google</Button>
                 </a>
-                <Button type="submit">Register</Button>
+                <Button type="submit">login</Button>
             </form>
         </div>
     </div>

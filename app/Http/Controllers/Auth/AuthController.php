@@ -19,18 +19,18 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $values = $request->validate([
-            'email' => ['required', 'email', 'unique:users', 'email'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
+        'email' => ['required', 'email'], 
+        'password' => ['required', 'string'],
+    ]);
 
-        if(Auth::attempt($values, $request->boolean('remember'))){
+        if (Auth::attempt($values, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             return redirect()->intended();
-        };
+        }
 
         return back()->withErrors([
-            'email' => 'User information not correct.'
+            'email' => 'User information not correct.',
         ]);
     }
 
@@ -46,11 +46,8 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::updateOrCreate([
+        $user->update([
             'google_id' => $googleUser->id,
-        ], [
-            'name' => $googleUser->name,
-            'email' => $googleUser->email,
             'google_token' => $googleUser->token,
             'google_refresh_token' => $googleUser->refreshToken,
         ]);

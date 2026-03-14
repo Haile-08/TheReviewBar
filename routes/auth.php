@@ -12,7 +12,7 @@ Route::middleware('guest')->group(function () {
 
     // login
     Route::get('/login', [AuthController::class, 'create'])->name('login');
-    Route::post('/login', [RegisterController::class, 'store']);
+    Route::post('/login', [AuthController::class, 'store']);
 
     // google auth
     Route::get('/auth/redirect', function () {
