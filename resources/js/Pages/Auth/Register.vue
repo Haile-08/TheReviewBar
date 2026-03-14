@@ -2,7 +2,9 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
+import { watch } from "vue";
 import { router } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -47,7 +49,7 @@ const formSchema = toTypedSchema(
         }),
 );
 
-const { handleSubmit, setFieldValue } = useForm({
+const { handleSubmit, setFieldValue, setErrors } = useForm({
     validationSchema: formSchema,
     initialValues: {
         name: "",
@@ -57,11 +59,23 @@ const { handleSubmit, setFieldValue } = useForm({
     },
 });
 
+watch(
+    () => usePage().props.errors,
+    (newErrors) => {
+        if (newErrors && Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        }
+    },
+    { immediate: true }
+);
+
 const change = (e: Event) => {
     const target = e.target as HTMLInputElement;
     const file = target.files?.[0];
     setFieldValue("profile_picture", file);
 };
+
+
 
 const submit = handleSubmit((values) => {
     console.log(values);
