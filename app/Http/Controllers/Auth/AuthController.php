@@ -18,7 +18,20 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        $values = $request->validate([
+            'email' => ['required', 'email', 'unique:users', 'email'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        if(Auth::attempt($values, $request->boolean('remember'))){
+            $request->session()->regenerate();
+
+            return redirect()->intended();
+        };
+
+        return back()->withErrors([
+            'email' => 'User information not correct.'
+        ]);
     }
 
     public function google()
@@ -44,6 +57,6 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->intended();
     }
 }
