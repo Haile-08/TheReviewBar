@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -19,14 +20,14 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $values = $request->validate([
-        'email' => ['required', 'email'], 
-        'password' => ['required', 'string'],
-    ]);
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
 
         if (Auth::attempt($values, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended();
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
@@ -54,6 +55,15 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->intended();
+        return redirect()->route('dashboard');
+    }
+
+    public function destroy (Request $request) {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
     }
 }

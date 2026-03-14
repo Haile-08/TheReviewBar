@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -31,8 +32,10 @@ class RegisterController extends Controller
 
         $user = User::create($values);
 
+        event(new Registered($user));
+
         Auth::login($user);
 
-        return redirect()->intended();
+        return redirect()->route('dashboard');
     }
 }

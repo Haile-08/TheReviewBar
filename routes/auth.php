@@ -20,3 +20,10 @@ Route::middleware('guest')->group(function () {
     })->name('google');
     Route::get('/auth/callback', [AuthController::class, 'google']);
 });
+
+Route::middleware('auth')->group(function () {
+    //logout
+    Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
+
+    
+});
