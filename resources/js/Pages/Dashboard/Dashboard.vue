@@ -4,12 +4,12 @@ import { computed } from "vue";
 
 const page = usePage();
 
-const user = computed(()=> page.props.auth.user)
+const user = computed(() => page.props.auth.user);
 </script>
 
 <template>
+    <Head title="Dashboard" />
     <h1>User Dashboard</h1>
     <h2>{{ user.name }}</h2>
-    <Link 
-    method="post" as="button" :href="route('logout')">Logout</Link>
+    <Link method="post" as="button" :href="route('logout')">Logout</Link>
 </template>
