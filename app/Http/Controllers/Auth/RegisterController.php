@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,9 @@ class RegisterController extends Controller
             $values['profile'] = Storage::disk('public')->put('profile', $request->profile);
         }
 
-        User::create($values);
+        $user = User::create($values);
+
+        Auth::login($user);
 
         return redirect()->route('home');
     }
