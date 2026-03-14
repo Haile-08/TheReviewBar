@@ -7,7 +7,6 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     FormControl,
     FormField,
@@ -18,19 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
-import NavLink from "@/components/shared/NavLink.vue";
-
-defineProps({
-    status: String,
-});
+import { computed } from "vue";
 
 const formSchema = toTypedSchema(
     z.object({
         email: z.string().email("Please enter a correct email address."),
-        password: z
-            .string()
-            .min(8, "Password too short at least 2 characters."),
-        remember: z.boolean().default(false),
     }),
 );
 
@@ -38,12 +29,12 @@ const { handleSubmit, setErrors } = useForm({
     validationSchema: formSchema,
     initialValues: {
         email: "",
-        password: "",
-        remember: false,
     },
 });
 
 const page = usePage();
+
+const status = computed(() => page.props.status);
 
 watch(
     () => page.props.errors,
@@ -57,15 +48,16 @@ watch(
 
 const submit = handleSubmit((values) => {
     console.log(values);
-    router.post("/login", values);
+    router.post("/forgot-password", values);
 });
+
+console.log(page.props.errors);
 </script>
 
 <template>
-    <Head title="Login" />
+    <Head title="Forgot Password" />
     <div class="p-10 w-dvw h-full flex justify-between items-center">
         <div class="w-[40%] h-full flex justify-center items-center flex-col">
-            <p v-if="status">{{ status }}</p>
             <div
                 v-if="
                     page.props.errors &&
@@ -75,7 +67,7 @@ const submit = handleSubmit((values) => {
             >
                 <Alert variant="destructive">
                     <AlertCircleIcon class="h-4 w-4" />
-                    <AlertTitle>Login Failed</AlertTitle>
+                    <AlertTitle>Reset Password Failed</AlertTitle>
                     <AlertDescription>
                         <ul class="list-disc list-inside">
                             <li
@@ -88,6 +80,7 @@ const submit = handleSubmit((values) => {
                     </AlertDescription>
                 </Alert>
             </div>
+            <p v-if="status">{{ status }}</p>
             <form class="w-2/3 space-y-6" @submit="submit">
                 <FormField v-slot="{ componentField }" name="email">
                     <FormItem>
@@ -102,40 +95,7 @@ const submit = handleSubmit((values) => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-
-                <FormField v-slot="{ componentField }" name="password">
-                    <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                            <Input
-                                type="password"
-                                placeholder="••••••••"
-                                v-bind="componentField"
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
-                <FormField v-slot="{ value, handleChange }" name="remember">
-                    <FormItem
-                        class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-                    >
-                        <FormControl>
-                            <Checkbox
-                                :checked="value"
-                                @update:checked="handleChange"
-                            />
-                        </FormControl>
-                        <div class="space-y-1 leading-none">
-                            <FormLabel>Remember me</FormLabel>
-                        </div>
-                    </FormItem>
-                </FormField>
-                <NavLink route-name="password.request">Forgot password</NavLink>
-                <a :href="route('google')">
-                    <Button type="button">Google</Button>
-                </a>
-                <Button type="submit">login</Button>
+                <Button type="submit">reset</Button>
             </form>
         </div>
     </div>

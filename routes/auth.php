@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,6 +21,12 @@ Route::middleware('guest')->group(function () {
         return Socialite::driver('google')->redirect();
     })->name('google');
     Route::get('/auth/callback', [AuthController::class, 'google']);
+
+    // Reset password
+    Route::get('/forgot-password', [ResetPasswordController::class, 'request'])->name('password.request');
+    Route::post('/forgot-password', [ResetPasswordController::class, 'send'])->name('password.email');
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {

@@ -7,7 +7,6 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     FormControl,
     FormField,
@@ -18,28 +17,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
-import NavLink from "@/components/shared/NavLink.vue";
 
-defineProps({
-    status: String,
-});
+const props = defineProps<{
+    email: string;
+    token: string;
+}>();
 
 const formSchema = toTypedSchema(
-    z.object({
-        email: z.string().email("Please enter a correct email address."),
-        password: z
-            .string()
-            .min(8, "Password too short at least 2 characters."),
-        remember: z.boolean().default(false),
-    }),
+    z
+        .object({
+            token: z.string(),
+            email: z.string().email("Please enter a correct email address."),
+            password: z
+                .string()
+                .min(8, "Password too short at least 2 characters."),
+            password_confirmation: z.string(),
+        })
+        .refine((data) => data.password === data.password_confirmation, {
+            message: "Passwords does not match make sure it matchs.",
+            path: ["password_confirmation"],
+        }),
 );
 
 const { handleSubmit, setErrors } = useForm({
     validationSchema: formSchema,
     initialValues: {
-        email: "",
+        token: props.token,
+        email: props.email,
         password: "",
-        remember: false,
+        password_confirmation: "",
     },
 });
 
@@ -57,15 +63,14 @@ watch(
 
 const submit = handleSubmit((values) => {
     console.log(values);
-    router.post("/login", values);
+    router.post("/reset-password", values);
 });
 </script>
 
 <template>
-    <Head title="Login" />
+    <Head title="Reset Password" />
     <div class="p-10 w-dvw h-full flex justify-between items-center">
-        <div class="w-[40%] h-full flex justify-center items-center flex-col">
-            <p v-if="status">{{ status }}</p>
+        <div class="w-[40%] h-full flex justify-center items-center">
             <div
                 v-if="
                     page.props.errors &&
@@ -116,26 +121,22 @@ const submit = handleSubmit((values) => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-                <FormField v-slot="{ value, handleChange }" name="remember">
-                    <FormItem
-                        class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-                    >
+
+                <FormField v-slot="{ componentField }" name="password_confirmation">
+                    <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                            <Checkbox
-                                :checked="value"
-                                @update:checked="handleChange"
+                            <Input
+                                type="password"
+                                placeholder="••••••••"
+                                v-bind="componentField"
                             />
                         </FormControl>
-                        <div class="space-y-1 leading-none">
-                            <FormLabel>Remember me</FormLabel>
-                        </div>
+                        <FormMessage />
                     </FormItem>
                 </FormField>
-                <NavLink route-name="password.request">Forgot password</NavLink>
-                <a :href="route('google')">
-                    <Button type="button">Google</Button>
-                </a>
-                <Button type="submit">login</Button>
+
+                <Button type="submit">Register</Button>
             </form>
         </div>
     </div>
