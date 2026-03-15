@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
+import AuthLayout from "@/components/layout/AuthLayout.vue";
 
 const SIZE = 5000000;
 const TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -87,20 +88,29 @@ const submit = handleSubmit((values) => {
 
 <template>
     <Head title="Register" />
-    <div class="p-10 w-dvw h-full flex justify-between items-center">
-        <div class="w-[40%] h-full flex justify-center items-center">
+    <AuthLayout
+        title="Get Started with Us"
+        subtitle="Complete these easy steps to register your account."
+        formTitle="Create Account"
+        formSubtitle="Join our community today."
+        :steps="[
+            'Sign up your <br /> account',
+            'Set up your <br /> workspace',
+            'Set up your <br /> profile',
+        ]"
+    >
+        <div class="w-full flex flex-col gap-6">
             <div
                 v-if="
                     page.props.errors &&
                     Object.keys(page.props.errors).length > 0
                 "
-                class="mb-6"
             >
                 <Alert variant="destructive">
                     <AlertCircleIcon class="h-4 w-4" />
-                    <AlertTitle>Login Failed</AlertTitle>
+                    <AlertTitle>Registration Failed</AlertTitle>
                     <AlertDescription>
-                        <ul class="list-disc list-inside">
+                        <ul class="list-disc list-inside mt-2">
                             <li
                                 v-for="(error, key) in page.props.errors"
                                 :key="key"
@@ -111,7 +121,8 @@ const submit = handleSubmit((values) => {
                     </AlertDescription>
                 </Alert>
             </div>
-            <form class="w-2/3 space-y-6" @submit="submit">
+
+            <form class="w-full space-y-5" @submit="submit">
                 <FormField name="profile">
                     <FormItem>
                         <FormLabel>Profile Picture</FormLabel>
@@ -119,6 +130,7 @@ const submit = handleSubmit((values) => {
                             <Input
                                 type="file"
                                 accept="image/*"
+                                class="cursor-pointer file:text-white"
                                 @change="change"
                             />
                         </FormControl>
@@ -182,8 +194,8 @@ const submit = handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <Button type="submit">Register</Button>
+                <Button type="submit" class="w-full mt-4"> Register </Button>
             </form>
         </div>
-    </div>
+    </AuthLayout>
 </template>

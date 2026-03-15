@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
 import { computed } from "vue";
+import AuthLayout from "@/components/layout/AuthLayout.vue";
 
 const formSchema = toTypedSchema(
     z.object({
@@ -56,8 +57,15 @@ console.log(page.props.errors);
 
 <template>
     <Head title="Forgot Password" />
-    <div class="p-10 w-dvw h-full flex justify-between items-center">
-        <div class="w-[40%] h-full flex justify-center items-center flex-col">
+    <AuthLayout 
+  title="Secure Your Account"
+  subtitle="Don't worry, it happens to the best of us."
+  formTitle="Reset Password"
+  formSubtitle="We'll send a recovery link to your email."
+  :steps="['Request <br /> reset', 'Check your <br /> email', 'Set new <br /> password']"
+>
+
+    <div class="w-full flex flex-col gap-6">
             <div
                 v-if="
                     page.props.errors &&
@@ -98,5 +106,5 @@ console.log(page.props.errors);
                 <Button type="submit">reset</Button>
             </form>
         </div>
-    </div>
+    </AuthLayout>
 </template>

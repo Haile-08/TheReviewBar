@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle as AlertCircleIcon } from "lucide-vue-next";
 import NavLink from "@/components/shared/NavLink.vue";
+import AuthLayout from "@/components/layout/AuthLayout.vue";
 
 defineProps({
     status: String,
@@ -63,8 +64,18 @@ const submit = handleSubmit((values) => {
 
 <template>
     <Head title="Login" />
-    <div class="p-10 w-dvw h-full flex justify-between items-center">
-        <div class="w-[40%] h-full flex justify-center items-center flex-col">
+    <AuthLayout
+        title="Welcome Back"
+        subtitle="Log in to continue where you left off."
+        formTitle="Login"
+        formSubtitle="Welcome back! Please enter your details."
+        :steps="[
+            'Enter <br /> credentials',
+            'Verify <br /> identity',
+            'Access <br /> dashboard',
+        ]"
+    >
+        <div class="w-full flex flex-col gap-6">
             <p v-if="status">{{ status }}</p>
             <div
                 v-if="
@@ -138,5 +149,5 @@ const submit = handleSubmit((values) => {
                 <Button type="submit">login</Button>
             </form>
         </div>
-    </div>
+    </AuthLayout>
 </template>
