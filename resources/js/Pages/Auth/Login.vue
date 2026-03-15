@@ -78,9 +78,8 @@ const submit = handleSubmit((values) => {
         ]"
     >
         <div class="space-y-6 w-full max-w-sm mx-auto">
-            
-            <Alert 
-                v-if="status" 
+            <Alert
+                v-if="status"
                 class="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
             >
                 <CheckCircleIcon class="h-4 w-4 text-emerald-500" />
@@ -90,7 +89,10 @@ const submit = handleSubmit((values) => {
             </Alert>
 
             <Alert
-                v-if="page.props.errors && Object.keys(page.props.errors).length > 0"
+                v-if="
+                    page.props.errors &&
+                    Object.keys(page.props.errors).length > 0
+                "
                 variant="destructive"
                 class="bg-red-500/10 border-red-500/20 text-red-400"
             >
@@ -100,7 +102,10 @@ const submit = handleSubmit((values) => {
                         Please fix the errors below to continue:
                     </p>
                     <ul class="list-disc list-inside space-y-1 text-sm">
-                        <li v-for="(errorMessage, field) in page.props.errors" :key="field">
+                        <li
+                            v-for="(errorMessage, field) in page.props.errors"
+                            :key="field"
+                        >
                             {{ errorMessage }}
                         </li>
                     </ul>
@@ -137,7 +142,9 @@ const submit = handleSubmit((values) => {
 
             <div class="relative flex items-center py-1">
                 <div class="flex-grow border-t border-white/10"></div>
-                <span class="flex-shrink-0 mx-4 text-zinc-500 text-[10px] uppercase tracking-widest font-bold">
+                <span
+                    class="flex-shrink-0 mx-4 text-zinc-500 text-[10px] uppercase tracking-widest font-bold"
+                >
                     OR
                 </span>
                 <div class="flex-grow border-t border-white/10"></div>
@@ -146,7 +153,9 @@ const submit = handleSubmit((values) => {
             <form class="space-y-4" @submit="submit">
                 <FormField v-slot="{ componentField }" name="email">
                     <FormItem>
-                        <FormLabel class="text-xs text-zinc-400">Email Address</FormLabel>
+                        <FormLabel class="text-xs text-zinc-400"
+                            >Email Address</FormLabel
+                        >
                         <FormControl>
                             <Input
                                 type="email"
@@ -161,7 +170,9 @@ const submit = handleSubmit((values) => {
 
                 <FormField v-slot="{ componentField }" name="password">
                     <FormItem>
-                        <FormLabel class="text-xs text-zinc-400">Password</FormLabel>
+                        <FormLabel class="text-xs text-zinc-400"
+                            >Password</FormLabel
+                        >
                         <FormControl>
                             <div class="relative">
                                 <Input
@@ -175,7 +186,10 @@ const submit = handleSubmit((values) => {
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none"
                                     @click="showPassword = !showPassword"
                                 >
-                                    <EyeIcon v-if="!showPassword" class="h-4 w-4" />
+                                    <EyeIcon
+                                        v-if="!showPassword"
+                                        class="h-4 w-4"
+                                    />
                                     <EyeOffIcon v-else class="h-4 w-4" />
                                 </button>
                             </div>
@@ -186,7 +200,9 @@ const submit = handleSubmit((values) => {
 
                 <div class="flex items-center justify-between pt-1 pb-2">
                     <FormField v-slot="{ value, handleChange }" name="remember">
-                        <FormItem class="flex flex-row items-center space-x-2 space-y-0">
+                        <FormItem
+                            class="flex flex-row items-center space-x-2 space-y-0"
+                        >
                             <FormControl>
                                 <Checkbox
                                     :checked="value"
@@ -194,7 +210,9 @@ const submit = handleSubmit((values) => {
                                     @update:checked="handleChange"
                                 />
                             </FormControl>
-                            <FormLabel class="text-zinc-400 text-xs font-normal cursor-pointer mt-0 leading-none">
+                            <FormLabel
+                                class="text-zinc-400 text-xs font-normal cursor-pointer mt-0 leading-none"
+                            >
                                 Remember me
                             </FormLabel>
                         </FormItem>

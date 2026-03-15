@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-    AlertCircle as AlertCircleIcon, 
-    CheckCircle2 as CheckCircleIcon 
+import {
+    AlertCircle as AlertCircleIcon,
+    CheckCircle2 as CheckCircleIcon,
 } from "lucide-vue-next";
 import AuthLayout from "@/components/layout/AuthLayout.vue";
 
@@ -55,7 +55,7 @@ const submit = handleSubmit((values) => {
 
 <template>
     <Head title="Forgot Password" />
-    
+
     <AuthLayout
         title="Secure Your Account"
         subtitle="Don't worry, it happens to the best of us."
@@ -68,9 +68,11 @@ const submit = handleSubmit((values) => {
         ]"
     >
         <div class="space-y-6 w-full max-w-sm mx-auto">
-            
-            <Alert 
-                v-if="page.props.errors && Object.keys(page.props.errors).length > 0" 
+            <Alert
+                v-if="
+                    page.props.errors &&
+                    Object.keys(page.props.errors).length > 0
+                "
                 variant="destructive"
                 class="bg-red-500/10 border-red-500/20 text-red-400"
             >
@@ -78,15 +80,18 @@ const submit = handleSubmit((values) => {
                 <AlertDescription>
                     <p class="mb-2 font-medium">Please fix the errors below:</p>
                     <ul class="list-disc list-inside space-y-1 text-sm">
-                        <li v-for="(error, key) in page.props.errors" :key="key">
+                        <li
+                            v-for="(error, key) in page.props.errors"
+                            :key="key"
+                        >
                             {{ error }}
                         </li>
                     </ul>
                 </AlertDescription>
             </Alert>
 
-            <Alert 
-                v-if="status" 
+            <Alert
+                v-if="status"
                 class="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
             >
                 <CheckCircleIcon class="h-4 w-4 text-emerald-500" />
@@ -95,10 +100,12 @@ const submit = handleSubmit((values) => {
                 </AlertDescription>
             </Alert>
 
-            <form @submit="submit" class="space-y-5">
+            <form class="space-y-5" @submit="submit">
                 <FormField v-slot="{ componentField }" name="email">
                     <FormItem>
-                        <FormLabel class="text-xs text-zinc-400">Email Address</FormLabel>
+                        <FormLabel class="text-xs text-zinc-400"
+                            >Email Address</FormLabel
+                        >
                         <FormControl>
                             <Input
                                 type="email"
@@ -111,14 +118,20 @@ const submit = handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <Button type="submit" class="w-full h-11 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all font-medium mt-2">
+                <Button
+                    type="submit"
+                    class="w-full h-11 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all font-medium mt-2"
+                >
                     Send Reset Link
                 </Button>
 
                 <div class="text-center mt-6">
                     <p class="text-xs text-zinc-400">
-                        Remember your password? 
-                        <Link href="/login" class="text-emerald-500 hover:text-emerald-400 font-medium hover:underline transition-colors">
+                        Remember your password?
+                        <Link
+                            href="/login"
+                            class="text-emerald-500 hover:text-emerald-400 font-medium hover:underline transition-colors"
+                        >
                             Back to login
                         </Link>
                     </p>

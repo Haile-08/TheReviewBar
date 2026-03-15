@@ -108,23 +108,45 @@ onUnmounted(() => {
     <div
         class="dark relative min-h-screen bg-background text-foreground font-sans overflow-hidden selection:bg-primary/30 flex flex-col"
     >
-        <div class="absolute top-[-10%] left-[-15%] w-[70vw] h-[80vh] bg-primary/20 blur-[100px] md:blur-[160px] rounded-full pointer-events-none"></div>
-        <div class="absolute top-[30%] left-[-5%] w-[40vw] h-[60vh] bg-primary/10 blur-[90px] md:blur-[140px] rounded-full pointer-events-none"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vh] bg-primary/5 blur-[100px] md:blur-[150px] rounded-full pointer-events-none"></div>
+        <div
+            class="absolute top-[-10%] left-[-15%] w-[70vw] h-[80vh] bg-primary/20 blur-[100px] md:blur-[160px] rounded-full pointer-events-none"
+        ></div>
+        <div
+            class="absolute top-[30%] left-[-5%] w-[40vw] h-[60vh] bg-primary/10 blur-[90px] md:blur-[140px] rounded-full pointer-events-none"
+        ></div>
+        <div
+            class="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vh] bg-primary/5 blur-[100px] md:blur-[150px] rounded-full pointer-events-none"
+        ></div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col flex-grow">
-            <nav class="flex flex-wrap items-center justify-between py-6 md:py-8 gap-4">
-                <div class="flex items-center gap-3 font-bold text-lg md:text-xl tracking-tight">
+        <div
+            class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col flex-grow"
+        >
+            <nav
+                class="flex flex-wrap items-center justify-between py-6 md:py-8 gap-4"
+            >
+                <div
+                    class="flex items-center gap-3 font-bold text-lg md:text-xl tracking-tight"
+                >
                     <div class="grid grid-cols-2 gap-[2px]">
-                        <div class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-sm"></div>
-                        <div class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/60 rounded-sm"></div>
-                        <div class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/80 rounded-sm"></div>
-                        <div class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/40 rounded-sm"></div>
+                        <div
+                            class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-sm"
+                        ></div>
+                        <div
+                            class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/60 rounded-sm"
+                        ></div>
+                        <div
+                            class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/80 rounded-sm"
+                        ></div>
+                        <div
+                            class="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary/40 rounded-sm"
+                        ></div>
                     </div>
                     ourtakeone
                 </div>
 
-                <div class="flex items-center gap-3 md:gap-6 text-[10px] md:text-xs font-bold tracking-widest text-muted-foreground">
+                <div
+                    class="flex items-center gap-3 md:gap-6 text-[10px] md:text-xs font-bold tracking-widest text-muted-foreground"
+                >
                     <NavLink
                         route-name="login"
                         class="hover:text-foreground transition-colors"
@@ -140,21 +162,35 @@ onUnmounted(() => {
                 </div>
             </nav>
 
-            <main class="flex-grow flex flex-col items-center justify-center pt-8 pb-16 md:pb-20 w-full gap-8 md:gap-12">
-                <header class="text-center w-full max-w-3xl flex flex-col items-center gap-4 md:gap-6 relative z-20">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] md:text-[10px] font-bold tracking-[0.2em]">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            <main
+                class="flex-grow flex flex-col items-center justify-center pt-8 pb-16 md:pb-20 w-full gap-8 md:gap-12"
+            >
+                <header
+                    class="text-center w-full max-w-3xl flex flex-col items-center gap-4 md:gap-6 relative z-20"
+                >
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] md:text-[10px] font-bold tracking-[0.2em]"
+                    >
+                        <span
+                            class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"
+                        ></span>
                         MOVIE OPINION
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] md:leading-[1.05]">
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] md:leading-[1.05]"
+                    >
                         Love Movies?<br />
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground">
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground"
+                        >
                             Talk Here
                         </span>
                     </h1>
 
-                    <p class="text-muted-foreground text-xs sm:text-sm md:text-lg font-light leading-relaxed max-w-2xl px-2">
+                    <p
+                        class="text-muted-foreground text-xs sm:text-sm md:text-lg font-light leading-relaxed max-w-2xl px-2"
+                    >
                         Join our growing community of movie lovers to chat with
                         people who love film as much as you do. Whether you're a
                         fan of big blockbusters or quiet indie films, this is
@@ -163,8 +199,12 @@ onUnmounted(() => {
                     </p>
                 </header>
 
-                <div class="w-full max-w-2xl mb-6 md:mb-10 h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-80 shadow-lg shadow-primary/50 relative">
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-[1px] opacity-60"></div>
+                <div
+                    class="w-full max-w-2xl mb-6 md:mb-10 h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-80 shadow-lg shadow-primary/50 relative"
+                >
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-[1px] opacity-60"
+                    ></div>
                 </div>
 
                 <div
@@ -194,10 +234,14 @@ onUnmounted(() => {
                                     class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-muted object-cover border border-border shadow-inner"
                                 />
                                 <div class="flex flex-col gap-0.5">
-                                    <span class="text-xs md:text-base font-bold text-foreground/95">
+                                    <span
+                                        class="text-xs md:text-base font-bold text-foreground/95"
+                                    >
                                         {{ review.handle }}
                                     </span>
-                                    <span class="text-[8px] md:text-[10px] text-primary font-bold tracking-widest">
+                                    <span
+                                        class="text-[8px] md:text-[10px] text-primary font-bold tracking-widest"
+                                    >
                                         {{ review.role }}
                                     </span>
                                 </div>
@@ -215,12 +259,18 @@ onUnmounted(() => {
                             </div>
                         </div>
 
-                        <p class="text-card-foreground/90 text-xs md:text-sm leading-relaxed flex-grow font-light italic">
+                        <p
+                            class="text-card-foreground/90 text-xs md:text-sm leading-relaxed flex-grow font-light italic"
+                        >
                             {{ review.text }}
                         </p>
 
-                        <div class="w-full h-40 sm:h-48 md:h-56 rounded-xl overflow-hidden relative border border-border/50 group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-card via-black/20 to-transparent z-10 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-50"></div>
+                        <div
+                            class="w-full h-40 sm:h-48 md:h-56 rounded-xl overflow-hidden relative border border-border/50 group"
+                        >
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-card via-black/20 to-transparent z-10 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-50"
+                            ></div>
                             <img
                                 :src="review.image"
                                 alt="Scene"
@@ -231,12 +281,26 @@ onUnmounted(() => {
                 </div>
             </main>
 
-            <footer class="py-6 md:py-8 flex flex-col md:flex-row gap-6 md:gap-4 justify-between items-center text-[9px] md:text-[10px] font-bold tracking-widest text-muted-foreground border-t border-border/50 w-full text-center md:text-left">
+            <footer
+                class="py-6 md:py-8 flex flex-col md:flex-row gap-6 md:gap-4 justify-between items-center text-[9px] md:text-[10px] font-bold tracking-widest text-muted-foreground border-t border-border/50 w-full text-center md:text-left"
+            >
                 <p>© 2024 OURTAKEONE — STRUCTURAL MINIMALISM</p>
                 <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-                    <a href="#" class="hover:text-foreground/80 transition-colors">PRIVACY POLICY</a>
-                    <a href="#" class="hover:text-foreground/80 transition-colors">TERMS OF SERVICE</a>
-                    <a href="#" class="hover:text-foreground/80 transition-colors">CONTACT</a>
+                    <a
+                        href="#"
+                        class="hover:text-foreground/80 transition-colors"
+                        >PRIVACY POLICY</a
+                    >
+                    <a
+                        href="#"
+                        class="hover:text-foreground/80 transition-colors"
+                        >TERMS OF SERVICE</a
+                    >
+                    <a
+                        href="#"
+                        class="hover:text-foreground/80 transition-colors"
+                        >CONTACT</a
+                    >
                 </div>
             </footer>
         </div>
