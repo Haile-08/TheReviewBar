@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
 import { computed, ref, watch } from "vue";
 import axios from "axios";

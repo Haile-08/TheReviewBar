@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
@@ -36,7 +36,7 @@ const { handleSubmit, setErrors } = useForm({
 
 const page = usePage();
 
-const status = computed(() => page.props.status as string);
+const status = computed(() => page.props.status);
 
 watch(
     () => page.props.errors,

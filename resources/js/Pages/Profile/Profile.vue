@@ -1,15 +1,12 @@
-<script setup lang="ts">
+<script setup>
 import { usePage, Head } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-    CheckCircleIcon,
-    AlertCircleIcon,
-} from "lucide-vue-next";
+import { CheckCircleIcon, AlertCircleIcon } from "lucide-vue-next";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import PostCard from "../../components/shared/PostCard.vue";
 
 defineProps({
     status: String,
@@ -84,43 +81,13 @@ const posts = computed(() => page.props.posts);
                 v-if="posts && Object.keys(posts).length"
                 class="w-full max-w-2xl mt-12 flex flex-col gap-6"
             >
-                <Card
+                <div
                     v-for="post in posts"
                     :key="post.id"
                     class="overflow-hidden"
                 >
-                    <CardHeader class="pb-2">
-                        <div class="flex justify-between items-center">
-                            <CardTitle class="text-base font-bold">{{
-                                post.name
-                            }}</CardTitle>
-                            <span class="text-sm text-muted-foreground">{{
-                                post.created_at_human
-                            }}</span>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p class="text-foreground mb-4">
-                            {{ post.description }}
-                        </p>
-                        <div
-                            class="border rounded-lg overflow-hidden flex bg-muted/20"
-                        >
-                            <img
-                                v-if="post.poster"
-                                :src="
-                                    'https://image.tmdb.org/t/p/w200' +
-                                    post.poster
-                                "
-                                :alt="post.movie"
-                                class="w-24 object-cover"
-                            />
-                            <div class="p-4 flex items-center">
-                                <span class="font-bold">{{ post.movie }}</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                    <PostCard :post="post" />
+                </div>
             </div>
         </div>
     </div>

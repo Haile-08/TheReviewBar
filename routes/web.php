@@ -10,6 +10,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // dashboard
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::post('/post', [PostController::class, 'store']);
+    Route::delete('/post/{post}', [PostController::class, 'destroy']);
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');

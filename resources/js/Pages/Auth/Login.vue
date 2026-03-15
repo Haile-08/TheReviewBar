@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref, watch } from "vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
