@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
 {
@@ -15,15 +17,15 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')->get()->map(function ($post) {
-                return [
-                    'id' => $post->id,
-                    'name' => $post->user->name,
-                    'description' => $post->description,
-                    'poster' => $post->poster,
-                    'movie' => $post->movie,
-                    'created_at_human' => $post->created_at->diffForHumans(),
-                ];
-            });
+            return [
+                'id' => $post->id,
+                'name' => $post->user->name,
+                'description' => $post->description,
+                'poster' => $post->poster,
+                'movie' => $post->movie,
+                'created_at_human' => $post->created_at->diffForHumans(),
+            ];
+        });
 
         return Inertia::render('Dashboard/Dashboard', [
             'posts' => $posts,
@@ -76,5 +78,20 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    public function search(Request $request) {
+        $query = $request->query('query');
+
+        if (!$query) return response()->json(['results' => []]);
+
+        $response = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/search/movie", [
+                'query' => $query,
+                'include_adult' => false,
+                'language' => 'en-US',
+            ]);
+
+        return $response->json();
     }
 }
