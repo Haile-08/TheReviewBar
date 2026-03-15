@@ -122,7 +122,10 @@ const submit = handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="password_confirmation">
+                <FormField
+                    v-slot="{ componentField }"
+                    name="password_confirmation"
+                >
                     <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
