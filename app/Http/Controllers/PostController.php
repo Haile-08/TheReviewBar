@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -43,9 +42,17 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        //
+        $values = $request->validate([
+            'movie' => ['required', 'string'],
+            'poster' => ['nullable', 'string'],
+            'description' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $request->user()->post()->create($values);
+
+        return redirect()->route('dashboard');
     }
 
     /**
