@@ -3,29 +3,25 @@ import { Link, usePage, Head, router } from "@inertiajs/vue3";
 import { computed, ref, watch } from "vue";
 import axios from "axios";
 import { toTypedSchema } from "@vee-validate/zod";
-import { useForm } from "vee-validate";
+import { useForm, useField } from "vee-validate";
 import * as z from "zod";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-} from "@/components/ui/form";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
-import { Search, X, CheckCircle2, Image as ImageIcon } from "lucide-vue-next";
+import { 
+    Search, 
+    X, 
+    CheckCircle2, 
+    Image as ImageIcon,
+    Bell,
+    MessageSquare,
+    Bookmark,
+    ArrowUp,
+    ArrowDown,
+    MoreHorizontal,
+    ChevronDown
+} from "lucide-vue-next";
 
 defineProps({
     status: String,
@@ -46,7 +42,7 @@ const formSchema = toTypedSchema(
     }),
 );
 
-const { handleSubmit, setFieldValue, values, resetForm } = useForm({
+const { handleSubmit, resetForm, errors, setErrors } = useForm({
     validationSchema: formSchema,
     initialValues: {
         description: "",
@@ -54,14 +50,22 @@ const { handleSubmit, setFieldValue, values, resetForm } = useForm({
     },
 });
 
+const { value: description } = useField("description");
+const { value: movie } = useField("movie");
+
 const searchQuery = ref("");
 const results = ref([]);
 const isLoading = ref(false);
+const showDropdown = ref(false);
+
 let controller = null;
+let searchTimeout = null;
 
 const handleSearch = async (query) => {
     if (!query) {
         results.value = [];
+        showDropdown.value = false;
+        isLoading.value = false;
         return;
     }
 
@@ -69,6 +73,7 @@ const handleSearch = async (query) => {
     controller = new AbortController();
 
     isLoading.value = true;
+    showDropdown.value = true;
 
     try {
         const response = await axios.get("/movies/search", {
@@ -77,377 +82,253 @@ const handleSearch = async (query) => {
         });
 
         results.value = response.data.results || [];
+        isLoading.value = false;
     } catch (err) {
         if (!axios.isCancel(err)) {
             console.error("Search error:", err);
+            isLoading.value = false;
         }
-    } finally {
-        isLoading.value = false;
     }
 };
 
 watch(searchQuery, (newVal) => {
-    handleSearch(newVal);
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        handleSearch(newVal);
+    }, 300);
 });
 
-const selectMovie = (movie) => {
-    setFieldValue("movie", movie);
+const selectMovie = (selectedMovie) => {
+    movie.value = selectedMovie;
     searchQuery.value = "";
+    showDropdown.value = false;
 };
 
 const clearMovie = () => {
-    setFieldValue("movie", null);
+    movie.value = null;
 };
 
 const submitPost = handleSubmit((value) => {
     const post = {
-        movie: value.movie.title,
+        movie: value.movie.title || value.movie.name, 
         poster: value.movie.poster_path,
         description: value.description,
     };
 
-    router.post("/post", post);
+    router.post("/post", post, {
+        preserveScroll: true,
+        onSuccess: () => resetForm(),
+        onError: (backendErrors) => setErrors(backendErrors)
+    });
 });
 </script>
 
 <template>
-    <Head title="Dashboard" />
-    <div
-        class="min-h-screen flex flex-col w-full bg-background font-sans text-foreground"
-    >
-        <Alert
-            v-if="status"
-            class="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-        >
-            <CheckCircleIcon class="h-4 w-4 text-emerald-500" />
-            <AlertDescription class="font-medium text-sm ml-2">
-                {{ status }}
-            </AlertDescription>
-        </Alert>
-
-        <Alert
-            v-if="
-                page.props.errors && Object.keys(page.props.errors).length > 0
-            "
-            variant="destructive"
-            class="bg-red-500/10 border-red-500/20 text-red-400"
-        >
-            <AlertCircleIcon class="h-4 w-4" />
-            <AlertDescription>
-                <p class="mb-2 font-medium">
-                    Please fix the errors below to continue:
-                </p>
-                <ul class="list-disc list-inside space-y-1 text-sm">
-                    <li
-                        v-for="(errorMessage, field) in page.props.errors"
-                        :key="field"
-                    >
-                        {{ errorMessage }}
-                    </li>
-                </ul>
-            </AlertDescription>
-        </Alert>
-        <div
-            class="w-full h-12 items-center px-10 flex justify-between bg-primary text-primary-foreground"
-        >
-            <div><h1 class="font-bold">User Dashboard</h1></div>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <Avatar class="h-8 w-8">
-                        <AvatarImage
-                            :src="'/storage/' + user.profile"
-                            alt="User Profile"
-                        />
-                        <AvatarFallback>{{
-                            user.name.charAt(0)
-                        }}</AvatarFallback>
-                    </Avatar>
-                    <h2 class="font-medium">{{ user.name }}</h2>
+    <Head title="OurTakeOne Archive" />
+    
+    <div class="min-h-screen flex w-full bg-[#030c08] font-sans text-gray-300 selection:bg-[#00e599] selection:text-black">
+        
+        <div class="flex-1 flex flex-col p-8 lg:p-12 h-screen overflow-y-auto custom-scrollbar relative">
+            
+            <header class="flex justify-between items-center mb-12">
+                <div class="flex items-center gap-4">
+                    <div class="grid grid-cols-2 gap-1 w-6 h-6">
+                        <div class="bg-[#00e599] rounded-sm"></div>
+                        <div class="bg-[#00e599] rounded-sm"></div>
+                        <div class="bg-[#00e599]/40 rounded-sm"></div>
+                        <div class="bg-[#00e599] rounded-sm"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-white font-bold text-xl tracking-[0.2em] leading-none">OURTAKEONE</h1>
+                        <p class="text-[10px] text-[#00e599]/60 tracking-[0.2em] mt-1">DIGITAL ARCHIVE INTERFACE</p>
+                    </div>
                 </div>
-                <Link
-                    method="post"
-                    as="button"
-                    :href="route('logout')"
-                    class="font-bold hover:underline"
-                    >Logout</Link
-                >
+                <div class="flex items-center gap-4">
+                    <button class="p-3 bg-white/[0.03] border border-white/5 rounded-xl hover:bg-white/10 transition lg:hidden">
+                        <Search class="w-5 h-5 text-gray-400" />
+                    </button>
+                    <Link method="post" as="button" :href="route('logout')" class="text-xs text-red-500/80 hover:text-red-500 tracking-widest uppercase block transition lg:hidden">
+                        Logout
+                    </Link>
+                </div>
+            </header>
+
+            <div v-if="status" class="mb-6 p-4 rounded-xl bg-[#00e599]/10 border border-[#00e599]/20 text-[#00e599] flex items-center gap-3">
+                <CheckCircle2 class="h-5 w-5" />
+                <span class="font-medium text-sm">{{ status }}</span>
+            </div>
+
+            <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4 mb-6 transition-all focus-within:border-white/20 relative z-20">
+                <form @submit.prevent="submitPost">
+                    <div class="flex items-start gap-4">
+                        <Avatar class="h-10 w-10 shrink-0">
+                            <AvatarImage :src="'/storage/' + user.profile" alt="User Profile" />
+                            <AvatarFallback class="bg-[#0a1e16] text-[#00e599]">{{ user.name.charAt(0) }}</AvatarFallback>
+                        </Avatar>
+                        
+                        <div class="flex-1 space-y-4">
+                            <div>
+                                <Textarea
+                                    v-model="description"
+                                    placeholder="Share a new cinematic entry..."
+                                    class="w-full resize-none bg-transparent border-none shadow-none focus-visible:ring-0 text-gray-200 placeholder:text-gray-600 p-2 min-h-[40px] text-lg"
+                                />
+                                <p v-if="errors.description" class="text-red-500/80 text-xs ml-2 mt-1">{{ errors.description }}</p>
+                            </div>
+
+                            <div v-if="movie" class="inline-flex items-center gap-3 bg-[#0a1e16] border border-[#00e599]/20 rounded-xl p-2 pr-4">
+                                <img
+                                    v-if="movie.poster_path"
+                                    :src="'https://image.tmdb.org/t/p/w200' + movie.poster_path"
+                                    class="w-8 h-12 object-cover rounded shadow-sm"
+                                />
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">{{ movie.title || movie.name }}</h3>
+                                    <p class="text-xs text-[#00e599]/70">{{ movie.release_date ? new Date(movie.release_date).getFullYear() : "N/A" }}</p>
+                                </div>
+                                <button @click="clearMovie" type="button" class="ml-2 text-gray-500 hover:text-red-400 transition">
+                                    <X class="h-4 w-4" />
+                                </button>
+                            </div>
+                            <p v-if="errors.movie && !movie" class="text-red-500/80 text-xs ml-2">{{ errors.movie }}</p>
+                        </div>
+
+                        <button type="submit" class="shrink-0 flex items-center gap-2 text-xs font-bold text-[#00e599] hover:text-white transition tracking-widest mt-2">
+                            QUICK SHARE <ChevronDown class="w-4 h-4" />
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="relative bg-white/[0.02] border border-white/5 rounded-2xl p-2 pl-6 flex items-center gap-4 mb-10 z-30">
+                <input 
+                    v-model="searchQuery"
+                    type="text" 
+                    placeholder="EXPLORE FILMS & CINEMATIC ENTRIES..." 
+                    class="flex-1 bg-transparent border-none text-white outline-none placeholder:text-gray-700 text-sm tracking-widest" 
+                />
+                <button class="bg-white/5 px-6 py-3 rounded-xl text-xs font-bold text-gray-500 tracking-widest hover:bg-white/10 transition">
+                    ARCHIVEK
+                </button>
+
+                <div v-if="showDropdown && (results.length || isLoading)" 
+                     class="absolute top-full left-0 right-0 mt-2 bg-[#06140e] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div v-if="isLoading" class="p-4 text-sm text-[#00e599] animate-pulse">
+                        Searching archives...
+                    </div>
+                    <div v-else class="max-h-[300px] overflow-y-auto custom-scrollbar p-2">
+                        <div v-for="item in results" :key="item.id"
+                            @click="selectMovie(item)"
+                            class="flex items-center gap-4 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
+                            <img v-if="item.poster_path" :src="'https://image.tmdb.org/t/p/w200' + item.poster_path" class="w-10 h-14 object-cover rounded shadow-sm" />
+                            <div v-else class="w-10 h-14 bg-white/5 flex items-center justify-center rounded text-gray-600"><ImageIcon class="h-4 w-4" /></div>
+                            <div>
+                                <h3 class="font-bold text-gray-200 text-sm">{{ item.title || item.name }}</h3>
+                                <p class="text-xs text-gray-500">{{ item.release_date ? new Date(item.release_date).getFullYear() : "N/A" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 z-10">
+                <div v-for="post in posts" :key="post.id" class="flex flex-col gap-4">
+                    <div class="bg-[#05140f] border border-white/5 rounded-2xl overflow-hidden relative group">
+                        <div class="absolute top-0 left-0 right-0 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent z-10">
+                            <span class="text-xs font-bold tracking-widest text-gray-400">Showcase</span>
+                            <Search class="w-4 h-4 text-gray-400" />
+                        </div>
+                        
+                        <div class="aspect-[4/3] bg-[#0a1e16] flex items-center justify-center relative overflow-hidden">
+                            <img v-if="post.poster" :src="'https://image.tmdb.org/t/p/w500' + post.poster" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+                            <div class="z-10 text-center p-6 border border-[#00e599]/20 bg-black/60 backdrop-blur-md rounded-xl shadow-2xl transition duration-500 group-hover:bg-black/40">
+                                <h2 class="font-serif text-3xl text-white italic">{{ post.movie }}</h2>
+                                <p class="text-[10px] tracking-widest text-[#00e599] mt-2 uppercase">Archived Entry</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start justify-between px-2">
+                        <div class="flex gap-3 items-center">
+                            <Avatar class="h-10 w-10 border border-white/10">
+                                <AvatarImage :src="'/storage/' + user.profile" />
+                                <AvatarFallback class="bg-black">{{ post.name ? post.name.charAt(0) : 'U' }}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-white font-bold text-sm">{{ post.name }}</h4>
+                                    <span class="text-[#00e599] text-xs">@user</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5">{{ post.description }}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-600 uppercase tracking-wider">{{ post.created_at_human }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3 px-2 mt-2">
+                        <button class="flex items-center gap-2 bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 rounded-xl px-4 py-2 text-xs font-bold text-white transition">
+                            <ArrowUp class="w-4 h-4 text-gray-400" /> 1.2K
+                        </button>
+                        <button class="flex items-center gap-2 bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 rounded-xl px-4 py-2 text-xs font-bold text-white transition">
+                            <ArrowDown class="w-4 h-4 text-gray-400" /> 42
+                        </button>
+                        <button class="ml-auto text-gray-600 hover:text-white transition">
+                            <MoreHorizontal class="w-5 h-5" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div
-            class="px-4 py-10 w-full max-w-4xl mx-auto flex flex-col items-center"
-        >
-            <Card class="w-full max-w-2xl shadow-lg border-muted">
-                <CardHeader
-                    class="flex flex-row items-center justify-between border-b pb-4 pt-4 px-6 bg-card"
-                >
-                    <CardTitle
-                        class="text-lg font-bold flex items-center gap-2"
+        <div class="w-[340px] border-l border-white/5 bg-[#04100b] p-10 flex flex-col hidden lg:flex justify-between h-screen sticky top-0">
+            <div>
+                <h3 class="text-[10px] text-[#00e599] tracking-[0.3em] font-bold mb-12">IDENTITY</h3>
+                
+                <div class="flex flex-col items-center text-center">
+                    <div class="relative mb-6">
+                        <Avatar class="w-32 h-32 ring-4 ring-[#00e599]/10 ring-offset-8 ring-offset-[#04100b]">
+                            <AvatarImage :src="'/storage/' + user.profile" alt="User Profile" />
+                            <AvatarFallback class="bg-[#0a1e16] text-3xl text-[#00e599]">{{ user.name.charAt(0) }}</AvatarFallback>
+                        </Avatar>
+                        <div class="absolute bottom-2 right-2 w-4 h-4 bg-[#00e599] rounded-full border-4 border-[#04100b]"></div>
+                    </div>
+                    
+                    <h2 class="text-2xl text-white font-bold">{{ user.name }}</h2>
+                    <p class="text-sm text-[#00e599]/80 italic mt-1">{{ user.email }}</p>
+
+                    <Link 
+                        method="post" 
+                        as="button" 
+                        :href="route('logout')" 
+                        class="text-[10px] font-bold text-red-500/60 hover:text-red-500 tracking-[0.2em] uppercase mt-3 transition"
                     >
-                        <span class="text-primary text-xl">🎬</span> Create Post
-                    </CardTitle>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        class="h-8 w-8 rounded-full text-muted-foreground"
-                    >
-                        <X class="h-5 w-5" />
-                    </Button>
-                </CardHeader>
+                        Logout
+                    </Link>
 
-                <form @submit="submitPost">
-                    <CardContent class="p-6">
-                        <FormField
-                            v-slot="{ componentField }"
-                            name="description"
-                        >
-                            <FormItem class="flex gap-4 mb-6">
-                                <Avatar class="h-10 w-10 mt-1">
-                                    <AvatarImage
-                                        :src="'/storage/' + user.profile"
-                                        alt="User"
-                                    />
-                                    <AvatarFallback>{{
-                                        user.name.charAt(0)
-                                    }}</AvatarFallback>
-                                </Avatar>
-                                <div class="flex-1 space-y-1">
-                                    <FormControl>
-                                        <Textarea
-                                            v-bind="componentField"
-                                            placeholder="What are you watching?"
-                                            class="w-full resize-none border-none shadow-none focus-visible:ring-0 text-lg placeholder:text-muted-foreground p-0 min-h-[80px]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
-                            </FormItem>
-                        </FormField>
+                    <button class="w-full mt-8 bg-[#00e599] hover:bg-[#00c987] text-black font-extrabold tracking-widest text-xs py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,229,153,0.15)]">
+                        ENTER DASHBOARD
+                    </button>
+                </div>
 
-                        <FormField name="movie">
-                            <FormItem>
-                                <div
-                                    v-if="values.movie"
-                                    class="relative bg-secondary/50 border rounded-xl p-3 flex items-center justify-between transition-all group"
-                                >
-                                    <div class="flex items-center gap-4">
-                                        <img
-                                            v-if="values.movie.poster_path"
-                                            :src="
-                                                'https://image.tmdb.org/t/p/w200' +
-                                                values.movie.poster_path
-                                            "
-                                            :alt="values.movie.title"
-                                            class="w-14 h-20 object-cover rounded shadow-sm"
-                                        />
-                                        <div
-                                            v-else
-                                            class="w-14 h-20 bg-muted flex flex-col items-center justify-center rounded shadow-sm text-muted-foreground"
-                                        >
-                                            <ImageIcon
-                                                class="h-6 w-6 mb-1 opacity-50"
-                                            />
-                                        </div>
+                <nav class="mt-16 space-y-6">
+                    <a href="#" class="flex items-center gap-4 text-sm font-bold text-gray-400 hover:text-[#00e599] transition tracking-widest">
+                        <Bell class="w-5 h-5" /> FEED ALERTS
+                    </a>
+                    <a href="#" class="flex items-center gap-4 text-sm font-bold text-gray-400 hover:text-[#00e599] transition tracking-widest">
+                        <MessageSquare class="w-5 h-5" /> DIRECT LINK
+                    </a>
+                    <a href="#" class="flex items-center gap-4 text-sm font-bold text-gray-400 hover:text-[#00e599] transition tracking-widest">
+                        <Bookmark class="w-5 h-5" /> SAVED LOGS
+                    </a>
+                </nav>
+            </div>
 
-                                        <div>
-                                            <h3
-                                                class="font-bold text-foreground text-lg"
-                                            >
-                                                {{
-                                                    values.movie.title ||
-                                                    values.movie.name
-                                                }}
-                                            </h3>
-                                            <p
-                                                class="text-muted-foreground text-sm"
-                                            >
-                                                {{
-                                                    values.movie.release_date
-                                                        ? new Date(
-                                                              values.movie
-                                                                  .release_date,
-                                                          ).getFullYear()
-                                                        : "N/A"
-                                                }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-center gap-2 pr-2">
-                                        <CheckCircle2
-                                            class="h-6 w-6 text-primary"
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            class="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8"
-                                            title="Remove movie"
-                                            @click="clearMovie"
-                                        >
-                                            <X class="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                <div v-else class="relative space-y-4">
-                                    <div class="relative flex items-center">
-                                        <Search
-                                            class="absolute left-3 h-5 w-5 text-muted-foreground"
-                                        />
-                                        <Input
-                                            v-model="searchQuery"
-                                            type="text"
-                                            placeholder="Search for a movie to tag..."
-                                            class="pl-10 py-6 bg-secondary/40 border-transparent focus-visible:ring-primary focus-visible:border-transparent text-md rounded-xl"
-                                        />
-                                    </div>
-
-                                    <div
-                                        v-if="isLoading"
-                                        class="text-primary text-sm font-medium animate-pulse ml-1"
-                                    >
-                                        Searching...
-                                    </div>
-
-                                    <ScrollArea
-                                        v-if="results.length && !isLoading"
-                                        class="h-[280px] rounded-md"
-                                    >
-                                        <div class="flex flex-col gap-2 pr-4">
-                                            <p
-                                                class="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 ml-1"
-                                            >
-                                                Suggested Movies
-                                            </p>
-
-                                            <div
-                                                v-for="item in results"
-                                                :key="item.id"
-                                                class="flex items-center gap-4 p-2 rounded-xl border border-transparent hover:border-border hover:bg-muted/50 cursor-pointer transition-all"
-                                                @click="selectMovie(item)"
-                                            >
-                                                <img
-                                                    v-if="item.poster_path"
-                                                    :src="
-                                                        'https://image.tmdb.org/t/p/w200' +
-                                                        item.poster_path
-                                                    "
-                                                    :alt="item.title"
-                                                    class="w-12 h-16 object-cover rounded-md shadow-sm"
-                                                />
-                                                <div
-                                                    v-else
-                                                    class="w-12 h-16 bg-muted flex items-center justify-center rounded-md text-muted-foreground"
-                                                >
-                                                    <ImageIcon
-                                                        class="h-5 w-5 opacity-50"
-                                                    />
-                                                </div>
-
-                                                <div class="flex-1">
-                                                    <h3
-                                                        class="font-bold text-foreground"
-                                                    >
-                                                        {{
-                                                            item.title ||
-                                                            item.name
-                                                        }}
-                                                    </h3>
-                                                    <p
-                                                        class="text-sm text-muted-foreground"
-                                                    >
-                                                        {{
-                                                            item.release_date
-                                                                ? new Date(
-                                                                      item.release_date,
-                                                                  ).getFullYear()
-                                                                : "N/A"
-                                                        }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </ScrollArea>
-
-                                    <div
-                                        v-else-if="
-                                            searchQuery &&
-                                            !isLoading &&
-                                            !results.length
-                                        "
-                                        class="text-muted-foreground mt-4 ml-1"
-                                    >
-                                        No movies found for "{{ searchQuery }}"
-                                    </div>
-                                    <FormMessage />
-                                </div>
-                            </FormItem>
-                        </FormField>
-                    </CardContent>
-
-                    <CardFooter
-                        class="bg-muted/30 px-6 py-4 flex justify-end gap-3 border-t"
-                    >
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            class="text-muted-foreground hover:text-foreground"
-                            @click="() => resetForm()"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            class="bg-[#ff5722] hover:bg-[#f4511e] text-white px-8 rounded-full"
-                        >
-                            Post
-                        </Button>
-                    </CardFooter>
-                </form>
-            </Card>
-
-            <div
-                v-if="posts && Object.keys(posts).length"
-                class="w-full max-w-2xl mt-12 flex flex-col gap-6"
-            >
-                <Card
-                    v-for="post in posts"
-                    :key="post.id"
-                    class="overflow-hidden"
-                >
-                    <CardHeader class="pb-2">
-                        <div class="flex justify-between items-center">
-                            <CardTitle class="text-base font-bold">{{
-                                post.name
-                            }}</CardTitle>
-                            <span class="text-sm text-muted-foreground">{{
-                                post.created_at_human
-                            }}</span>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p class="text-foreground mb-4">
-                            {{ post.description }}
-                        </p>
-                        <div
-                            class="border rounded-lg overflow-hidden flex bg-muted/20"
-                        >
-                            <img
-                                v-if="post.poster"
-                                :src="
-                                    'https://image.tmdb.org/t/p/w200' +
-                                    post.poster
-                                "
-                                :alt="post.movie"
-                                class="w-24 object-cover"
-                            />
-                            <div class="p-4 flex items-center">
-                                <span class="font-bold">{{ post.movie }}</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+            <div class="border-t border-white/5 pt-8">
+                <div class="flex gap-6 mb-4">
+                    <a href="#" class="text-[10px] text-gray-600 tracking-widest hover:text-white transition">PRIVACY</a>
+                    <a href="#" class="text-[10px] text-gray-600 tracking-widest hover:text-white transition">TERMS</a>
+                </div>
+                <p class="text-[10px] text-gray-700 tracking-widest uppercase">&copy; 2026 OURTAKEONE ARCHIVE</p>
             </div>
         </div>
     </div>
