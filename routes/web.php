@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'Home')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('/dashboard', 'Dashboard/Dashboard')->name('dashboard');
+    Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
 });
 
-Route::resource('post', PostController::class);
+Route::resource('post', PostController::class)->except('index');
 
 require __DIR__.'/auth.php';

@@ -14,10 +14,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::with('user')->get()->map(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'name' => $post->user->name,
+                    'description' => $post->description,
+                    'poster' => $post->poster,
+                    'movie' => $post->movie,
+                    'created_at_human' => $post->created_at->diffForHumans(),
+                ];
+            });
 
         return Inertia::render('Dashboard/Dashboard', [
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
 
