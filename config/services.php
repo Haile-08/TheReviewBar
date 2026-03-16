@@ -41,4 +41,8 @@ return [
         'redirect' => env('GOOGLE_CALLBACK_URL'),
     ],
 
+    'tmdb' => [
+        'token' => env('TMDB_TOKEN'),
+    ],
+
 ];

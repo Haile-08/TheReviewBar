@@ -1,3 +1,68 @@
+<div align="center">
+  <img src="images/logo.svg" alt="OurTakeOne Logo" height="150" />
+</div>
+
+<h1 align="center">OurTakeOne</h1>
+
+## Overview
+
+The site is a place where people can share their thoughts and opinions on the movies they watched.
+
+## UI
+
+### Landing
+
+![Landing Page](images/Landing.png)
+
+### Login
+
+![Login Page](images/Login.png)
+
+### Register
+
+![Register Page](images/Register.png)
+
+### Dashboard
+
+![Dashboard Page](images/Dashboard.png)
+
+## Technologies Used
+
+- **Backend:** Laravel 12 (PHP 8.2+)
+- **Frontend:** Vue.js 3, Inertia.js
+- **Styling:** Tailwind CSS
+- **Database / Caching:** MySQL/PostgreSQL, Redis
+- **Documentation:** Scramble (Swagger)
+
+## Key Features
+
+- **API for Movie Recommendations:**
+  Integrate a third-party movie API (e.g., TMDb) to fetch and serve trending and recommended movie data. Users can save their favorite movies.
+- **User Authentication and Preferences:**
+  Implement JWT-based user authentication for secure access. Create models to allow users to save and retrieve favorite movies.
+- **Performance Optimization:**
+  Use Redis for caching trending and recommended movie data to reduce API call frequency and improve response time.
+- **Comprehensive Documentation:**
+  Use Swagger to document all API endpoints. Host Swagger documentation at `/api/docs` for frontend consumption.
+
+## Database
+
+### Entities and Attributes
+
+- **User**: `id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`
+- **Movie**: `id`, `tmdb_id`, `title`, `overview`, `poster_path`, `release_date`, `created_at`, `updated_at`
+- **Review**: `id`, `user_id`, `movie_id`, `rating`, `content`, `created_at`, `updated_at`
+- **Favorite**: `id`, `user_id`, `movie_id`, `created_at`, `updated_at`
+
+
+## Accessing TMDB images
+
+TMDB images can be accessed using the following URL structure:
+
+`https://image.tmdb.org/t/p/original/<poster>`
+
+---
+
 ## Git-Flows version control
 
 Gitflow is an alternative Git branching model that involves the use of feature branches and multiple primary branches.

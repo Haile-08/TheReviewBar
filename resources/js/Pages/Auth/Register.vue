@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref, onBeforeUnmount, watch } from "vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
@@ -26,7 +26,7 @@ import AuthLayout from "@/components/layout/AuthLayout.vue";
 const SIZE = 5000000;
 const TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-const previewUrl = ref<string | null>(null);
+const previewUrl = ref(null);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
@@ -79,8 +79,8 @@ watch(
     { immediate: true },
 );
 
-const change = (e: Event) => {
-    const target = e.target as HTMLInputElement;
+const change = (e) => {
+    const target = e.target;
     const file = target.files?.[0];
     if (file) {
         setFieldValue("profile", file);
