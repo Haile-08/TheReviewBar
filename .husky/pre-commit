@@ -1,0 +1,4 @@
+pnpm run format
+pnpm run lint:php
+pnpm run lint:vue
+pnpm run lint

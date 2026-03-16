@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": [
@@ -10,16 +10,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "dedoc/scramble": "^0.13.14",
         "inertiajs/inertia-laravel": "^2.0",
-        "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
+        "laravel/socialite": "^5.25",
         "laravel/tinker": "^2.10.1",
-        "laravel/wayfinder": "^0.1.9"
+        "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.24",
+        "laravel/pint": "^1.29",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
@@ -51,27 +52,8 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
         ],
-        "dev:ssr": [
-            "npm run build:ssr",
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
-        ],
-        "lint": [
-            "pint --parallel"
-        ],
-        "lint:check": [
-            "pint --parallel --test"
-        ],
-        "ci:check": [
-            "Composer\\Config::disableProcessTimeout",
-            "npm run lint:check",
-            "npm run format:check",
-            "npm run types:check",
-            "@test"
-        ],
         "test": [
             "@php artisan config:clear --ansi",
-            "@lint:check",
             "@php artisan test"
         ],
         "post-autoload-dump": [
