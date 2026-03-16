@@ -26,7 +26,7 @@ import AuthLayout from "@/components/layout/AuthLayout.vue";
 const SIZE = 5000000;
 const TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-const previewUrl = (ref < string) | (null > null);
+const previewUrl = ref(null);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 

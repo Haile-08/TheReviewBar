@@ -22,6 +22,11 @@ import {
 } from "lucide-vue-next";
 import AuthLayout from "@/components/layout/AuthLayout.vue";
 
+const props = defineProps({
+    email: String,
+    token: String,
+});
+
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
