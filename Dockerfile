@@ -21,6 +21,10 @@ RUN docker-php-ext-install pdo_pgsql zip bcmath
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+COPY composer.json composer.lock ./
+
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --prefer-dist
+
 COPY . .
 COPY --from=frontend-builder /app/public/build ./public/build
 
