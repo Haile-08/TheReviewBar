@@ -2,7 +2,7 @@ import './bootstrap';
 
 import { createApp, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
-import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import { ZiggyVue } from 'ziggy-js';
 
 createInertiaApp({
     title:  (title) => `THE REVIEW BAR | ${title}`,
