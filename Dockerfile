@@ -5,7 +5,7 @@ RUN npm install -g pnpm && pnpm install
 COPY . .
 RUN pnpm run build
 
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 WORKDIR /var/www/html
 
 RUN apk add --no-cache \
@@ -37,4 +37,4 @@ RUN chmod +x /usr/local/bin/deploy.sh
 
 EXPOSE 80
 
-CMD ["sh", "-c", "nginx && php-fpm"]
+CMD ["sh", "-c", "/usr/local/bin/deploy.sh && nginx && php-fpm"]
