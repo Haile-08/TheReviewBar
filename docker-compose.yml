@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:V/o9u2TE4r5BECs9pmhUPsa6uqc8zbCX1EJNaR6xMSE= # Same as your .env
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=thereviewbar
+      - DB_USERNAME=thereviewbar_user
+      - DB_PASSWORD=thereviewbar_password
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=thereviewbar
+      - POSTGRES_USER=thereviewbar_user
+      - POSTGRES_PASSWORD=thereviewbar_password
+    ports:
+      - "5433:5432" # Use 5433 to avoid conflict if you have a local postgres

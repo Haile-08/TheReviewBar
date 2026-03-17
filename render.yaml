@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: thereviewbar
+    runtime: docker
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_URL
+        fromDatabase:
+          name: thereviewbar-db
+          property: connectionString
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: LOG_CHANNEL
+        value: stderr
+      - fromGroup: thereviewbar-secrets
+
+databases:
+  - name: thereviewbar-db
+    plan: free
+    databaseName: thereviewbar
+    user: thereviewbar_user
+
+envVarGroups:
+  - name: thereviewbar-secrets
+    envVars:
+      - key: APP_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: TMDB_TOKEN
+        sync: false
