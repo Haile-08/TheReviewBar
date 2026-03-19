@@ -35,6 +35,9 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY scripts/deploy.sh /usr/local/bin/deploy.sh
 RUN chmod +x /usr/local/bin/deploy.sh
 
+COPY scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 80
 
-CMD ["sh", "-c", "/usr/local/bin/deploy.sh && nginx && php-fpm"]
+CMD ["/usr/local/bin/entrypoint.sh"]
