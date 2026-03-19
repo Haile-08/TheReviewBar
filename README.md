@@ -34,6 +34,21 @@ The site is a place where people can share their thoughts and opinions on the mo
 - **Database / Caching:** MySQL/PostgreSQL, Redis
 - **Documentation:** Scramble (Swagger)
 
+## Deployment (Railway)
+
+Set these variables in Railway (Service → Variables):
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_KEY` (generate with `php artisan key:generate --show`)
+- `APP_URL` (your public Railway URL, including `https://`)
+- Database vars (whichever style you use): `DATABASE_URL` or `DB_CONNECTION` + `DB_HOST` + `DB_PORT` + `DB_DATABASE` + `DB_USERNAME` + `DB_PASSWORD`
+
+Notes:
+
+- This app uses `SESSION_DRIVER=database` by default, so the `sessions` table must exist (run migrations on deploy).
+- If you use Google login, ensure `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` match your Railway URL.
+
 ## Key Features
 
 - **API for Movie Recommendations:**
