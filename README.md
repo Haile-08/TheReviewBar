@@ -48,6 +48,7 @@ Notes:
 
 - This app uses `SESSION_DRIVER=database` by default, so the `sessions` table must exist (run migrations on deploy).
 - If you use Google login, ensure `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` match your Railway URL.
+- If you hit `413 Request Entity Too Large (nginx)` (often from large form payloads/uploads), increase `CLIENT_MAX_BODY_SIZE`, `PHP_UPLOAD_MAX_FILESIZE`, and `PHP_POST_MAX_SIZE`.
 
 ## Key Features
 

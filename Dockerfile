@@ -30,7 +30,8 @@ COPY --from=frontend-builder /app/public/build ./public/build
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/nginx.conf /etc/nginx/http.d/default.conf.template
+COPY docker/php-custom.ini /usr/local/etc/php/conf.d/zz-custom.ini.template
 
 COPY scripts/deploy.sh /usr/local/bin/deploy.sh
 RUN chmod +x /usr/local/bin/deploy.sh
